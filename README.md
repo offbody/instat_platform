@@ -1,56 +1,20 @@
-# Инстат MVP | Платформа управления СОКБ
+<div align="center">
+<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
+</div>
 
-Интеллектуальная панель управления показателями СОКБ (Стандарт Общественного Капитала Бизнеса) с аналитикой на базе ИИ.
+# Run and deploy your AI Studio app
 
-## Стек технологий
+This contains everything you need to run your app locally.
 
-*   **Frontend**: React, TypeScript, Tailwind CSS
-*   **Сборка**: Vite
-*   **Графики**: Recharts
-*   **AI**: Google Gemini API (@google/genai)
-*   **Карты**: Yandex Maps API
+View your app in AI Studio: https://ai.studio/apps/drive/1g0Nwu-pajWyfPUe3q-YgETEpDZvgvuIq
 
-## Установка и запуск
+## Run Locally
 
-1.  Клонируйте репозиторий:
-    ```bash
-    git clone https://github.com/your-username/instat-mvp.git
-    cd instat-mvp
-    ```
+**Prerequisites:**  Node.js
 
-2.  Установите зависимости:
-    ```bash
-    npm install
-    # или
-    yarn install
-    ```
 
-3.  Создайте файл `.env` в корне проекта и добавьте ваш ключ API (для локальной разработки):
-    ```env
-    API_KEY=your_google_gemini_api_key
-    ```
-
-4.  Запустите режим разработки:
-    ```bash
-    npm run dev
-    ```
-
-## Деплой на Vercel
-
-Проект полностью готов к деплою на Vercel.
-
-1.  Загрузите проект на GitHub.
-2.  Импортируйте репозиторий в Vercel.
-3.  В настройках проекта на Vercel добавьте Environment Variable:
-    *   **Name**: `API_KEY`
-    *   **Value**: *Ваш ключ Google Gemini API*
-4.  Нажмите **Deploy**.
-
-## Структура проекта
-
-*   `/src` - (Корневая директория в данном MVP)
-    *   `components/` - UI компоненты (Sidebar, StatCard, Charts)
-    *   `services/` - Логика работы с API (Gemini)
-    *   `types.ts` - TypeScript интерфейсы
-    *   `constants.tsx` - Начальные данные
-    *   `App.tsx` - Основной компонент приложения
+1. Install dependencies:
+   `npm install`
+2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
+3. Run the app:
+   `npm run dev`
