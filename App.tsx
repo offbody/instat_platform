@@ -10,8 +10,7 @@ import { getESGInsights } from './services/geminiService';
 import { 
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, 
   BarChart, Bar, Cell, PieChart, Pie, AreaChart, Area, RadialBarChart, RadialBar,
-  Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Legend, ComposedChart, LabelList,
-  ReferenceLine
+  Legend, ComposedChart, LabelList, ReferenceLine
 } from 'recharts';
 
 interface Expert {
@@ -54,8 +53,6 @@ const App: React.FC = () => {
   const [selectedExpertForConnection, setSelectedExpertForConnection] = useState<Expert | null>(null);
   const [selectedExpertForContact, setSelectedExpertForContact] = useState<Expert | null>(null);
   const [expertMenuOpen, setExpertMenuOpen] = useState<{ id: number; section: string } | null>(null);
-
-  const [activeRadarColor, setActiveRadarColor] = useState<string | null>(null);
 
   // Инициализация базы подтверждающих документов для 85 показателей
   const [uploadedFiles, setUploadedFiles] = useState<Record<string, string[]>>(() => {
@@ -266,7 +263,6 @@ const App: React.FC = () => {
 
   const chartText = theme === 'dark' ? '#97A0AF' : '#6B778C';
   const chartGrid = theme === 'dark' ? '#2C333A' : '#EBECF0';
-  const defaultRadarColor = theme === 'dark' ? '#8590A2' : '#97A0AF';
 
   const questionnaireTabs = [
     { 
@@ -300,30 +296,6 @@ const App: React.FC = () => {
   ];
 
   const currentSokbData = useMemo(() => data.sokbDetails[sokbTab], [sokbTab, data]);
-
-  const radarData = useMemo(() => {
-    return currentSokbData.criteria.map(c => ({
-      subject: c.name.length > 15 ? c.name.substring(0, 15) + '...' : c.name,
-      A: c.value,
-      fullMark: 100,
-      color: c.color 
-    }));
-  }, [currentSokbData]);
-
-  const renderCustomizedRadarDot = (props: any) => {
-    const { cx, cy, payload } = props;
-    return (
-      <circle 
-        cx={cx} 
-        cy={cy} 
-        r={4} 
-        fill={payload.color} 
-        stroke={theme === 'dark' ? '#1D2125' : '#FFFFFF'} 
-        strokeWidth={1}
-        className="transition-all duration-300 hover:scale-125"
-      />
-    );
-  };
 
   const productivityData = [
     { name: 'Q1', plan: 70, fact: 65, eff: 75 },
@@ -454,7 +426,7 @@ const App: React.FC = () => {
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-2 border-b border-atlassian-border dark:border-atlassian-darkBorder pb-6">
             <div>
               <h3 className="text-sm font-bold text-atlassian-text dark:text-atlassian-darkText uppercase tracking-wider">Матрица устойчивости</h3>
-              <p className="text-xs text-atlassian-subtext dark:text-atlassian-darkSubtext mt-1">Радарный анализ векторов социальной ответственности</p>
+              <p className="text-xs text-atlassian-subtext dark:text-atlassian-darkSubtext mt-1">Столбчатая диаграмма векторов социальной ответственности</p>
             </div>
             
             <div className="flex flex-wrap gap-1 bg-atlassian-bg dark:bg-atlassian-darkBg p-1 rounded-lg">
@@ -475,75 +447,61 @@ const App: React.FC = () => {
             </div>
           </div>
 
-          <div className="flex-1 grid grid-cols-1 lg:grid-cols-2 gap-4 items-center">
-            <div className="h-[350px] relative">
+          <div className="flex-1 flex flex-col gap-6 h-full">
+            <div className="flex-1 w-full min-h-0">
               <ResponsiveContainer width="100%" height="100%">
-                <RadarChart 
-                  cx="50%" 
-                  cy="50%" 
-                  outerRadius="80%" 
-                  data={radarData}
-                  onMouseMove={(state: any) => {
-                    if (state.isTooltipActive && state.activePayload && state.activePayload.length) {
-                       const hoveredItem = state.activePayload[0].payload;
-                       if (hoveredItem && hoveredItem.color) {
-                          setActiveRadarColor(hoveredItem.color);
-                       }
-                    } else {
-                       setActiveRadarColor(null);
-                    }
-                  }}
-                  onMouseLeave={() => setActiveRadarColor(null)}
+                <BarChart
+                  data={currentSokbData.criteria}
+                  margin={{ top: 20, right: 0, left: 0, bottom: 0 }}
+                  barSize={60}
                 >
-                  <PolarGrid stroke={chartGrid} />
-                  <PolarAngleAxis dataKey="subject" tick={{ fill: chartText, fontSize: 10, fontWeight: 600 }} />
-                  <PolarRadiusAxis angle={30} domain={[0, 100]} tick={false} axisLine={false} />
-                  <Radar
-                    name={currentSokbData.title}
-                    dataKey="A"
-                    stroke={activeRadarColor || defaultRadarColor}
-                    strokeWidth={3}
-                    fill={activeRadarColor || defaultRadarColor}
-                    fillOpacity={0.3}
-                    dot={renderCustomizedRadarDot}
-                    isAnimationActive={false}
+                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke={chartGrid} />
+                  <XAxis 
+                    dataKey="name" 
+                    stroke={chartText} 
+                    fontSize={11} 
+                    tickLine={false} 
+                    axisLine={false} 
+                    interval={0}
+                    tick={{ dy: 10 }}
                   />
-                  <Tooltip 
-                    contentStyle={{ 
-                      borderRadius: '8px', border: 'none', 
+                  <YAxis 
+                    stroke={chartText} 
+                    fontSize={11} 
+                    tickLine={false} 
+                    axisLine={false} 
+                    domain={[0, 100]} 
+                    hide
+                  />
+                  <Tooltip
+                    cursor={{ fill: theme === 'dark' ? '#2C333A' : '#F4F5F7' }}
+                    contentStyle={{
+                      borderRadius: '8px', border: 'none',
                       boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
                       backgroundColor: theme === 'dark' ? '#1D2125' : '#FFFFFF',
                       color: theme === 'dark' ? '#FFFFFF' : '#242424'
                     }}
                   />
-                </RadarChart>
+                  <Bar dataKey="value" radius={[6, 6, 0, 0]}>
+                    {currentSokbData.criteria.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={entry.color} />
+                    ))}
+                    <LabelList dataKey="value" position="top" fill={chartText} fontSize={12} fontWeight="bold" formatter={(val: any) => `${val}%`} />
+                  </Bar>
+                </BarChart>
               </ResponsiveContainer>
             </div>
 
-            <div className="space-y-4 pr-4">
-              <h4 className="text-xs font-bold text-atlassian-text dark:text-atlassian-darkText uppercase mb-6 flex items-center gap-2">
-                <span className="w-1.5 h-4 bg-atlassian-brand rounded-full"></span>
-                Детализация: {currentSokbData.title}
-              </h4>
-              <ul className="space-y-4">
-                {currentSokbData.criteria.map((criterion, idx) => (
-                  <li key={idx} className="group">
-                    <div className="flex justify-between items-center mb-1.5">
-                      <span className="text-sm font-medium text-atlassian-text dark:text-atlassian-darkText leading-tight">
-                        {criterion.name}
-                      </span>
-                      <span className="text-xs font-bold text-atlassian-subtext">{criterion.value}%</span>
-                    </div>
-                    <div className="w-full bg-atlassian-bg dark:bg-atlassian-darkBg h-1.5 rounded-full overflow-hidden relative">
-                       <div className="absolute inset-0 opacity-20" style={{ backgroundImage: 'linear-gradient(45deg,rgba(0,0,0,.1) 25%,transparent 25%,transparent 50%,rgba(0,0,0,.1) 50%,rgba(0,0,0,.1) 75%,transparent 75%,transparent)', backgroundSize: '4px 4px' }}></div>
-                      <div 
-                        className="h-full rounded-full transition-all duration-1000 ease-out relative z-10" 
-                        style={{ width: `${criterion.value}%`, backgroundColor: criterion.color }}
-                      ></div>
-                    </div>
-                  </li>
-                ))}
-              </ul>
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 shrink-0">
+               {currentSokbData.criteria.map((criterion, idx) => (
+                  <div key={idx} className="flex items-center gap-3 p-3 rounded-lg bg-atlassian-bg dark:bg-white/5 border border-transparent dark:border-white/10">
+                     <div className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: criterion.color }}></div>
+                     <div className="flex-1 min-w-0">
+                        <p className="text-xs font-bold text-atlassian-text dark:text-white truncate" title={criterion.name}>{criterion.name}</p>
+                     </div>
+                     <span className="text-xs font-bold text-atlassian-subtext">{criterion.value}%</span>
+                  </div>
+               ))}
             </div>
           </div>
         </div>
@@ -559,7 +517,7 @@ const App: React.FC = () => {
             <div className="flex flex-col">
               <div className="flex items-baseline gap-2 mt-2 mb-6">
                  <span className="text-7xl font-medium text-[#242424] dark:text-white leading-none tracking-tighter">67</span>
-                 <span className="text-sm font-medium text-[#242424] dark:text-[#E2E8F0]">баллов</span>
+                 <span className="text-xs font-bold text-[#242424] dark:text-[#E2E8F0] uppercase tracking-wide">баллов</span>
               </div>
               
               <div className="space-y-3 mb-6">
@@ -1746,7 +1704,7 @@ const App: React.FC = () => {
                     <div>
                       <h4 className="text-xs font-bold uppercase tracking-widest text-atlassian-subtext mb-4">Национальные приоритеты</h4>
                       {/* Updated Style: Blue Theme */}
-                      <div className="p-6 bg-[#F5F8FF] dark:bg-[#182333] rounded-xl border border-[#DDEAFE] dark:border-[#2C333A]">
+                      <div className="p-6 bg-[#F5F8FF] dark:bg-[#182333] rounded-xl border border-[#DDEAFE] dark:border-[#2C3B33]">
                         <div className="flex justify-between items-center mb-3">
                           <span className="text-[10px] font-bold text-[#1E40AF] dark:text-[#93C5FD] uppercase tracking-wide">Прогресс к 2030</span>
                           <span className="text-2xl font-bold text-[#1E40AF] dark:text-[#93C5FD]">{data.nationalGoalsProgress}%</span>
@@ -1854,21 +1812,42 @@ const App: React.FC = () => {
                       </div>
                    </div>
                    
-                   {/* Updated Style: Blue Theme for Turnover */}
-                   <div className="bg-[#F5F8FF] dark:bg-[#182333] p-6 rounded-xl border border-[#DDEAFE] dark:border-[#2C333A] flex flex-col justify-between relative overflow-hidden">
-                      <div className="absolute top-0 right-0 p-4 opacity-5">
+                   {/* Updated Style: Blue Theme for Turnover - MATCHING ECG RATING TYPOGRAPHY */}
+                   <div className="bg-[#F5F8FF] dark:bg-[#182333] p-6 rounded-xl border border-transparent dark:border-[#2C3B33] flex flex-col justify-between relative overflow-hidden">
+                      <span className="absolute top-6 right-6 text-[10px] font-bold text-[#182333] dark:text-[#60A5FA] uppercase tracking-wider">ТЕКУЧЕСТЬ ПЕРСОНАЛА</span>
+                      
+                      <div className="absolute top-0 right-0 p-4 opacity-5 z-0">
                          <span className="material-symbols-rounded text-8xl text-[#1E40AF] dark:text-[#93C5FD]">directions_run</span>
                       </div>
-                      <div className="relative z-10">
-                        <h4 className="text-xs font-bold uppercase tracking-widest text-[#1E40AF] dark:text-[#93C5FD] mb-4">Текучесть персонала</h4>
-                        <div className="flex items-baseline gap-2 mb-2">
-                           <span className="text-4xl font-bold text-[#1E3A8A] dark:text-white">2.4%</span>
-                           <span className="text-xs text-[#16AB16] font-bold uppercase bg-[#DCFCE7] dark:bg-[#14532D] px-2 py-1 rounded">-0.8% к Г/Г</span>
+                      
+                      <div className="relative z-10 mt-4">
+                        <div className="flex items-baseline gap-3 mb-4">
+                           <span className="text-5xl font-medium text-[#182333] dark:text-[#DBEAFE] leading-none">2.4</span>
+                           <span className="text-xs font-bold text-[#182333] dark:text-[#60A5FA] uppercase tracking-wide mr-2">%</span>
+                           <span className="text-3xl font-medium text-[#182333] dark:text-[#DBEAFE] leading-none opacity-30">/</span>
+                           <span className="text-xs font-bold text-[#182333] dark:text-[#60A5FA] uppercase tracking-wide">ГОД</span>
                         </div>
-                        <p className="text-xs text-[#1E40AF]/80 dark:text-[#93C5FD]/80 leading-relaxed">
+                        
+                        <div className="flex items-center gap-2 mb-4">
+                            <span className="px-2 py-0.5 bg-[#DCFCE7] dark:bg-[#14532D] text-[#166534] dark:text-[#BBF7D0] rounded text-[9px] font-bold uppercase tracking-wide">
+                               -0.8% к Г/Г
+                            </span>
+                        </div>
+                        
+                        <p className="text-xs text-[#1E40AF]/80 dark:text-[#93C5FD]/80 leading-relaxed mb-6">
                           Показатель ниже среднего по отрасли на 1.5%. Основной фактор удержания — прозрачная система грейдирования.
                         </p>
+                        
+                        <div className="flex flex-wrap gap-2">
+                            <span className="px-2 py-0.5 rounded bg-[#DDEAFE] dark:bg-[#1E3A8A] text-[#1E40AF] dark:text-[#93C5FD] text-[9px] font-bold uppercase tracking-wide">
+                               IT-СЕКТОР - 12%
+                            </span>
+                             <span className="px-2 py-0.5 rounded bg-[#DDEAFE] dark:bg-[#1E3A8A] text-[#1E40AF] dark:text-[#93C5FD] text-[9px] font-bold uppercase tracking-wide">
+                               РЕТЕЙЛ - 35%
+                            </span>
+                        </div>
                       </div>
+                      
                       <button className="w-full mt-6 h-9 bg-[#1E40AF] text-white text-[10px] font-bold rounded-lg uppercase tracking-widest hover:bg-[#1E3A8A] transition-colors relative z-10 shadow-lg shadow-blue-900/20">
                         Скачать полный отчет HR
                       </button>
@@ -2209,7 +2188,7 @@ const App: React.FC = () => {
                 {breadcrumbLabel}
               </span>
             </div>
-            <h1 className="text-3xl font-bold text-atlassian-text dark:text-white tracking-tight leading-tight">{activeTitle}</h1>
+            <h1 className="text-4xl font-medium text-atlassian-text dark:text-white tracking-tight leading-tight">{activeTitle}</h1>
           </div>
           <div className="flex items-center gap-3">
             <button className="w-10 h-10 rounded-lg flex items-center justify-center text-atlassian-subtext hover:bg-white dark:hover:bg-atlassian-darkBorder transition-colors bg-white/50 dark:bg-atlassian-darkSurface border border-atlassian-border dark:border-atlassian-darkBorder">

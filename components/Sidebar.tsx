@@ -25,13 +25,15 @@ const Sidebar: React.FC<SidebarProps> = ({ activeSection, setActiveSection, isCo
     <div className={`${isCollapsed ? 'w-20' : 'w-72'} bg-white dark:bg-atlassian-darkSurface h-screen fixed left-0 top-0 flex flex-col z-50 transition-all duration-300 border-r border-atlassian-border dark:border-atlassian-darkBorder shadow-xl shadow-black/5`}>
       <div className={`p-5 border-b border-atlassian-border dark:border-atlassian-darkBorder relative flex flex-col ${isCollapsed ? 'items-center gap-2' : ''}`}>
         <div className={`flex items-center gap-3 ${isCollapsed ? 'justify-center mb-0' : 'mb-6'}`}>
-          <div className="w-10 h-10 bg-atlassian-brand rounded-xl flex items-center justify-center text-white shrink-0 shadow-lg shadow-atlassian-brand/30">
-            <span className="material-symbols-rounded text-[24px]">trending_up</span>
-          </div>
+          <img 
+            src="https://raw.githubusercontent.com/offbody/instat_platform/main/media/instat-sign.svg" 
+            alt="Инстат" 
+            className="w-10 h-10 shrink-0" 
+          />
           {!isCollapsed && (
             <div className="overflow-hidden whitespace-nowrap animate-in fade-in duration-300">
-              <h1 className="text-base font-bold tracking-tight text-atlassian-text dark:text-atlassian-darkText uppercase leading-none">Инстат</h1>
-              <p className="text-[10px] text-atlassian-subtext dark:text-atlassian-darkSubtext uppercase tracking-widest font-bold mt-0.5">Платформа</p>
+              <h1 className="text-base font-bold tracking-tight text-atlassian-text dark:text-atlassian-darkText uppercase leading-none">ПЛАТФОРМА ИНСТАТ</h1>
+              <p className="text-[10px] text-atlassian-subtext dark:text-atlassian-darkSubtext uppercase tracking-widest font-bold mt-0.5">ОЗНАКОМИТЕЛЬНЫЙ РЕЖИМ</p>
             </div>
           )}
         </div>
