@@ -43,12 +43,19 @@ const StatCard: React.FC<StatCardProps> = ({ title, value, unit, change, icon, c
   const chartColor = getChartColor(color);
   const gradientId = `grad-${uniqueId}`;
 
+  // Helper to get background color class from text color class
+  const getIconBgClass = (textColorClass: string) => {
+    return textColorClass.replace('text-', 'bg-') + '/10';
+  };
+
+  const iconBgClass = getIconBgClass(color);
+
   return (
     <div className="p-5 bg-white dark:bg-atlassian-darkSurface rounded-xl border border-atlassian-border dark:border-atlassian-darkBorder flex flex-col transition-all hover:shadow-atl-hover group">
       {/* Header */}
       <div className="flex items-start justify-between mb-4">
         <div className="flex gap-3 items-center">
-          <div className="w-10 h-10 rounded-lg bg-atlassian-bg dark:bg-white/5 flex items-center justify-center shadow-sm shrink-0 border border-atlassian-border dark:border-atlassian-darkBorder">
+          <div className={`w-10 h-10 rounded-lg flex items-center justify-center shadow-sm shrink-0 border border-transparent ${iconBgClass} dark:bg-white/5`}>
             <span className={`material-symbols-rounded text-[20px] ${color}`}>{icon}</span>
           </div>
           <div>

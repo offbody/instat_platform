@@ -67,8 +67,8 @@ const AIAssistantWidget: React.FC<AIAssistantWidgetProps> = ({ data, theme }) =>
           {/* Header */}
           <div className="p-4 border-b border-atlassian-border dark:border-atlassian-darkBorder flex items-center justify-between bg-gradient-to-r from-atlassian-brand/5 to-atlassian-info/5">
             <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-lg bg-atlassian-brand flex items-center justify-center text-white shadow-sm">
-                <span className="material-symbols-rounded text-[20px]">auto_awesome</span>
+              <div className="w-10 h-10 rounded-lg bg-atlassian-brand/10 flex items-center justify-center text-atlassian-brand shadow-sm">
+                <span className="material-symbols-rounded text-[22px]">auto_awesome</span>
               </div>
               <div>
                 <h3 className="text-xs font-bold text-atlassian-text dark:text-white uppercase tracking-wider">Инстат Ассистент</h3>
@@ -120,15 +120,10 @@ const AIAssistantWidget: React.FC<AIAssistantWidgetProps> = ({ data, theme }) =>
                 onClick={handleQuickAnalysis}
                 className="whitespace-nowrap flex items-center gap-2 px-3 py-1.5 rounded-lg border border-atlassian-subtext/30 bg-white dark:bg-atlassian-darkSurface text-atlassian-subtext dark:text-atlassian-darkSubtext text-[10px] font-bold uppercase hover:bg-atlassian-bg dark:hover:bg-atlassian-darkBg hover:text-atlassian-text dark:hover:text-white transition-all shadow-sm"
               >
-                <span className="material-symbols-rounded text-[16px]">bar_chart</span>
+                <div className="w-5 h-5 rounded bg-atlassian-brand/10 flex items-center justify-center text-atlassian-brand shrink-0">
+                  <span className="material-symbols-rounded text-[14px]">bar_chart</span>
+                </div>
                 Экспресс-анализ СОКБ
-              </button>
-              <button 
-                onClick={() => setInputValue('Как улучшить рейтинг СОКБ?')}
-                className="whitespace-nowrap flex items-center gap-2 px-3 py-1.5 rounded-lg border border-atlassian-subtext/30 bg-white dark:bg-atlassian-darkSurface text-atlassian-subtext dark:text-atlassian-darkSubtext text-[10px] font-bold uppercase hover:bg-atlassian-bg dark:hover:bg-atlassian-darkBg hover:text-atlassian-text dark:hover:text-white transition-all shadow-sm"
-              >
-                <span className="material-symbols-rounded text-[16px]">star_outline</span>
-                Улучшить рейтинг
               </button>
             </div>
           )}
