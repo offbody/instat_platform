@@ -1,16 +1,15 @@
-
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import Sidebar from './components/Sidebar';
 import StatCard from './components/StatCard';
 import RegionsMap from './components/RegionsMap';
 import AIAssistantWidget from './components/AIAssistantWidget';
-import { Section, SOKBData, SOKBTab, SOKBCriterion, RegionData } from './types';
+import { Section, SOKBData, SOKBTab, RegionData } from './types';
 import { INITIAL_DATA } from './constants';
 import { getESGInsights } from './services/geminiService';
 import { 
-  LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, 
+  Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, 
   BarChart, Bar, Cell, PieChart, Pie, AreaChart, Area, RadialBarChart, RadialBar,
-  Legend, ComposedChart, LabelList, ReferenceLine
+  Legend, ComposedChart, LabelList
 } from 'recharts';
 
 interface Expert {
@@ -110,7 +109,7 @@ const App: React.FC = () => {
     return initialFiles;
   });
   
-  const [expertsList, setExpertsList] = useState<Expert[]>([
+  const [expertsList] = useState<Expert[]>([
     { id: 1, name: 'Александра Волкова', role: 'Эколог-аудитор', exp: '12 лет', rating: 4.9, tags: ['ISO 14001', 'GRI Standards', 'СОКБ'], status: 'online', category: 'ecology', avatarUrl: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=200&h=200', isAcademyMember: true, phone: '+7 900 123 45 67', email: 'volkova.a@инстат.рф' },
     { id: 2, name: 'Дмитрий Соколов', role: 'Специалист по КСО', exp: '8 лет', rating: 4.7, tags: ['Социальные инвестиции', 'HR-бренд'], status: 'offline', category: 'social', avatarUrl: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&q=80&w=200&h=200', isAcademyMember: false, phone: '+7 911 345 67 89', email: 'sokolov.d@инстат.рф' },
     { id: 3, name: 'Елена Морозова', role: 'Стратегический консультант', exp: '15 лет', rating: 5.0, tags: ['ESG-стратегия', 'Управление рисками', 'СОКБ'], status: 'online', category: 'governance', avatarUrl: 'https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?auto=format&fit=crop&q=80&w=200&h=200', isAcademyMember: true, phone: '+7 920 987 65 43', email: 'morozova.e@инстат.рф' },
