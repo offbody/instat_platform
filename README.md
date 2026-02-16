@@ -3,4 +3,4 @@
 </div>
 
 # INSTAT HUB
-sustainable and mitigation management
+Sustainable and mitigation management
