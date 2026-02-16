@@ -1,0 +1,74 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Inter+Tight:ital,wght@0,100..900;1,100..900&display=swap');
+
+body {
+    font-family: 'Inter Tight', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    transition: background-color 0.2s ease, color 0.2s ease;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4, h5, .font-display {
+    font-family: 'Inter Tight', sans-serif;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+}
+
+.atl-card {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.06), 0px 1px 3px rgba(0, 0, 0, 0.1);
+    border: 1px solid #EDEBE9;
+    transition: box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.dark .atl-card {
+    background: #242424;
+    box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.4);
+    border: 1px solid #323130;
+}
+
+.material-symbols-rounded {
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20;
+  font-size: 20px;
+  user-select: none;
+}
+
+/* Custom Scrollbar for consistent look */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #DCDCDC;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #C0C0C0;
+}
+.dark ::-webkit-scrollbar-thumb {
+  background: #404040;
+}
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: #505050;
+}
+
+.dark .ymaps-2-1-79-map {
+    filter: grayscale(1) invert(0.9) brightness(0.8) contrast(1.2);
+}
+
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+    -webkit-appearance: none; 
+    margin: 0; 
+}
+input[type=number] {
+    -moz-appearance: textfield;
+}
