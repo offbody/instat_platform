@@ -8,6 +8,8 @@ interface AIAssistantWidgetProps {
   theme: 'light' | 'dark';
 }
 
+const AVATAR_URL = "https://raw.githubusercontent.com/offbody/instat_platform/main/media/stata-ai-avatar.png";
+
 const AIAssistantWidget: React.FC<AIAssistantWidgetProps> = ({ data, theme }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<{ role: 'user' | 'ai'; text: string }[]>([
@@ -67,11 +69,11 @@ const AIAssistantWidget: React.FC<AIAssistantWidgetProps> = ({ data, theme }) =>
           {/* Header */}
           <div className="p-4 border-b border-atlassian-border dark:border-atlassian-darkBorder flex items-center justify-between bg-gradient-to-r from-atlassian-brand/5 to-atlassian-info/5">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-lg bg-atlassian-brand/10 flex items-center justify-center text-atlassian-brand shadow-sm">
-                <span className="material-symbols-rounded text-[22px]">auto_awesome</span>
+              <div className="w-10 h-10 rounded-lg overflow-hidden shadow-sm shrink-0">
+                <img src={AVATAR_URL} alt="AI Avatar" className="w-full h-full object-cover" />
               </div>
               <div>
-                <h3 className="text-xs font-bold text-atlassian-text dark:text-white uppercase tracking-wider">Инстат Ассистент</h3>
+                <h3 className="text-xs font-bold text-atlassian-text dark:text-white uppercase tracking-wider">Консультант Инстат AI</h3>
                 <div className="flex items-center gap-1.5 mt-0.5">
                   <span className="w-1.5 h-1.5 rounded-full bg-atlassian-success animate-pulse"></span>
                   <span className="text-[10px] text-atlassian-subtext dark:text-atlassian-darkSubtext font-bold uppercase tracking-wide">В сети</span>
@@ -89,7 +91,12 @@ const AIAssistantWidget: React.FC<AIAssistantWidgetProps> = ({ data, theme }) =>
           {/* Messages Area */}
           <div className="flex-1 overflow-y-auto p-4 space-y-4">
             {messages.map((msg, idx) => (
-              <div key={idx} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+              <div key={idx} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start items-end gap-2'}`}>
+                {msg.role === 'ai' && (
+                  <div className="w-6 h-6 rounded-full overflow-hidden shrink-0 mb-1 border border-atlassian-border dark:border-atlassian-darkBorder">
+                    <img src={AVATAR_URL} alt="AI" className="w-full h-full object-cover" />
+                  </div>
+                )}
                 <div className={`max-w-[85%] px-4 py-3 rounded-2xl text-sm leading-relaxed ${
                   msg.role === 'user' 
                   ? 'bg-atlassian-brand text-white rounded-br-none shadow-sm' 
@@ -100,7 +107,10 @@ const AIAssistantWidget: React.FC<AIAssistantWidgetProps> = ({ data, theme }) =>
               </div>
             ))}
             {isThinking && (
-              <div className="flex justify-start">
+              <div className="flex justify-start items-end gap-2">
+                 <div className="w-6 h-6 rounded-full overflow-hidden shrink-0 mb-1 border border-atlassian-border dark:border-atlassian-darkBorder">
+                    <img src={AVATAR_URL} alt="AI" className="w-full h-full object-cover" />
+                 </div>
                 <div className="bg-atlassian-bg dark:bg-atlassian-darkBg px-4 py-3 rounded-2xl rounded-bl-none border border-atlassian-border dark:border-atlassian-darkBorder">
                   <div className="flex gap-1.5">
                     <span className="w-1.5 h-1.5 bg-atlassian-subtext rounded-full animate-bounce"></span>
@@ -159,11 +169,13 @@ const AIAssistantWidget: React.FC<AIAssistantWidgetProps> = ({ data, theme }) =>
       {/* Floating Toggle Button */}
       <button 
         onClick={() => setIsOpen(!isOpen)}
-        className={`w-14 h-14 rounded-full flex items-center justify-center text-white shadow-xl shadow-atlassian-brand/30 transition-all hover:scale-105 active:scale-95 group ${isOpen ? 'bg-atlassian-text dark:bg-atlassian-darkBorder' : 'bg-gradient-to-tr from-atlassian-brand to-atlassian-info'}`}
+        className={`w-14 h-14 rounded-full flex items-center justify-center text-white shadow-xl shadow-atlassian-brand/30 transition-all hover:scale-105 active:scale-95 group overflow-hidden ${isOpen ? 'bg-atlassian-text dark:bg-atlassian-darkBorder' : 'bg-white p-0 border-2 border-atlassian-brand'}`}
       >
-        <span className={`material-symbols-rounded text-[28px] transition-transform duration-300 ${isOpen ? 'rotate-90' : 'group-hover:rotate-12'}`}>
-          {isOpen ? 'expand_more' : 'auto_awesome'}
-        </span>
+        {isOpen ? (
+             <span className="material-symbols-rounded text-[28px] transition-transform duration-300 rotate-90">expand_more</span>
+        ) : (
+             <img src={AVATAR_URL} alt="Open Chat" className="w-full h-full object-cover" />
+        )}
       </button>
     </div>
   );
