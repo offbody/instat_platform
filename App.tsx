@@ -13,6 +13,68 @@ import {
   Legend, ComposedChart, LabelList, ReferenceLine
 } from 'recharts';
 
+// --- Preloader Component ---
+const Preloader: React.FC<{ onComplete: () => void }> = ({ onComplete }) => {
+  const [progress, setProgress] = useState(0);
+  const [status, setStatus] = useState('Инициализация платформы...');
+
+  useEffect(() => {
+    const steps = [
+      { p: 20, s: 'Загрузка профиля компании...' },
+      { p: 45, s: 'Подключение к базе данных СОКБ...' },
+      { p: 70, s: 'Синхронизация ESG показателей...' },
+      { p: 90, s: 'Подготовка ИИ-аналитики...' },
+      { p: 100, s: 'Готово' }
+    ];
+
+    let currentStep = 0;
+    
+    const timer = setInterval(() => {
+      if (currentStep >= steps.length) {
+        clearInterval(timer);
+        setTimeout(onComplete, 500); // Small delay after 100%
+        return;
+      }
+
+      const step = steps[currentStep];
+      setProgress(step.p);
+      setStatus(step.s);
+      currentStep++;
+    }, 400); // Adjust speed of loading here
+
+    return () => clearInterval(timer);
+  }, [onComplete]);
+
+  return (
+    <div className="fixed inset-0 z-[99999] bg-[#F5F5F5] dark:bg-[#1B1B1B] flex flex-col items-center justify-center transition-opacity duration-500">
+      <div className="w-full max-w-sm px-6 flex flex-col items-center">
+        <div className="mb-8 relative">
+           <img 
+             src="https://raw.githubusercontent.com/offbody/instat_platform/main/media/logo-preloader.svg" 
+             alt="Instat" 
+             className="w-20 h-20 animate-pulse brightness-0 dark:invert" 
+           />
+        </div>
+        
+        <h2 className="text-2xl font-bold text-atlassian-text dark:text-white mb-2 tracking-tight">ПЛАТФОРМА ИНСТАТ</h2>
+        <p className="text-xs text-atlassian-subtext dark:text-atlassian-darkSubtext uppercase tracking-widest font-bold mb-8">Управление устойчивым развитием</p>
+
+        <div className="w-full bg-[#E5E7EB] dark:bg-white/10 h-1.5 rounded-full overflow-hidden mb-3">
+          <div 
+            className="bg-atlassian-brand h-full transition-all duration-500 ease-out" 
+            style={{ width: `${progress}%` }}
+          ></div>
+        </div>
+        
+        <div className="flex justify-between w-full text-[10px] font-bold uppercase tracking-wide">
+           <span className="text-atlassian-text dark:text-white">{status}</span>
+           <span className="text-atlassian-subtext">{progress}%</span>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 interface Expert {
   id: number;
   name: string;
@@ -29,6 +91,7 @@ interface Expert {
 }
 
 const App: React.FC = () => {
+  const [loading, setLoading] = useState(true);
   const [activeSection, setActiveSection] = useState<Section>('overview');
   const [sokbTab, setSokbTab] = useState<SOKBTab>('development');
   const [questionnaireTab, setQuestionnaireTab] = useState('health');
@@ -289,6 +352,11 @@ const App: React.FC = () => {
         return point;
     });
   }, [currentSokbData, matrixPeriod]);
+
+  // --- Render logic ---
+  if (loading) {
+    return <Preloader onComplete={() => setLoading(false)} />;
+  }
 
   const CustomMatrixTooltip = ({ active, payload, label }: any) => {
     if (active && payload && payload.length) {

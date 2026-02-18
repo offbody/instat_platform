@@ -1,7 +1,9 @@
+
 {
-  "name": "Инстат MVP",
-  "description": "Интеллектуальная панель управления показателями СОКБ с аналитикой на базе ИИ Инстат.",
-  "version": "1.0.0",
-  "lastUpdated": "2024-05-24",
-  "requestFramePermissions": []
+  "name": "Платформа Инстат | Production",
+  "description": "Интеллектуальная панель управления показателями СОКБ с аналитикой на базе Инстат AI",
+  "version": "1.0.1",
+  "lastUpdated": "2024-05-25",
+  "requestFramePermissions": [],
+  "deploymentReady": true
 }

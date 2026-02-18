@@ -10,8 +10,9 @@ export default defineConfig(({ mode }) => {
   return {
     plugins: [react()],
     define: {
-      // Safely replace process.env.API_KEY with the stringified value during build
-      'process.env.API_KEY': JSON.stringify(env.API_KEY)
+      // Safely replace process.env.API_KEY with the stringified value during build.
+      // Priority: System Environment (Vercel) -> Local .env file
+      'process.env.API_KEY': JSON.stringify(process.env.API_KEY || env.API_KEY)
     },
     server: {
       port: 3000,
@@ -19,7 +20,7 @@ export default defineConfig(({ mode }) => {
     },
     build: {
       outDir: 'dist',
-      sourcemap: true
+      sourcemap: false // Disable sourcemaps for production security
     }
   };
 });
