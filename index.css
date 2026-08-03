@@ -5,32 +5,108 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+    --app-bg: #F7F8FA;
+    --app-surface: rgba(255, 255, 255, 0.92);
+    --app-surface-strong: #FFFFFF;
+    --app-border: #DDE3EA;
+    --app-border-soft: #E9EDF2;
+    --app-text: #172033;
+    --app-subtext: #5F6B7A;
+    --app-brand: #0052CC;
+    --app-brand-soft: #EAF2FF;
+    --app-ring: rgba(0, 82, 204, 0.28);
+    --app-shadow-sm: 0 1px 2px rgba(17, 24, 39, 0.05);
+    --app-shadow-md: 0 10px 30px rgba(15, 23, 42, 0.08), 0 1px 2px rgba(15, 23, 42, 0.06);
+    --app-shadow-lg: 0 18px 45px rgba(15, 23, 42, 0.12);
+}
+
+.dark {
+    --app-bg: #111418;
+    --app-surface: rgba(31, 35, 41, 0.9);
+    --app-surface-strong: #1F2329;
+    --app-border: #343B45;
+    --app-border-soft: #2A3038;
+    --app-text: #F5F7FA;
+    --app-subtext: #A7B0BE;
+    --app-brand: #579DFF;
+    --app-brand-soft: rgba(87, 157, 255, 0.16);
+    --app-ring: rgba(87, 157, 255, 0.32);
+    --app-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.35);
+    --app-shadow-md: 0 14px 34px rgba(0, 0, 0, 0.26), 0 1px 2px rgba(0, 0, 0, 0.4);
+    --app-shadow-lg: 0 22px 55px rgba(0, 0, 0, 0.35);
+}
+
+html {
+    background: var(--app-bg);
+}
+
 body {
     font-family: 'Inter Tight', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     transition: background-color 0.2s ease, color 0.2s ease;
     overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.65), rgba(255, 255, 255, 0) 220px),
+      var(--app-bg);
+    color: var(--app-text);
 }
 
 h1, h2, h3, h4, h5, .font-display {
     font-family: 'Inter Tight', sans-serif;
-    font-weight: 700;
-    letter-spacing: -0.02em;
+    font-weight: 760;
+    letter-spacing: 0;
 }
 
 .atl-card {
-    background: white;
-    border-radius: 12px;
-    box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.06), 0px 1px 3px rgba(0, 0, 0, 0.1);
-    border: 1px solid #EDEBE9;
-    transition: box-shadow 0.2s ease, border-color 0.2s ease;
+    background: var(--app-surface);
+    border-radius: 8px;
+    box-shadow: var(--app-shadow-sm);
+    border: 1px solid var(--app-border-soft);
+    backdrop-filter: saturate(1.15) blur(10px);
+    transition: box-shadow 0.2s ease, border-color 0.2s ease, transform 0.2s ease, background-color 0.2s ease;
 }
 
 .dark .atl-card {
-    background: #242424;
-    box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.4);
-    border: 1px solid #323130;
+    background: var(--app-surface);
+    box-shadow: var(--app-shadow-sm);
+    border-color: var(--app-border-soft);
+}
+
+.atl-card:hover {
+    border-color: var(--app-border);
+    box-shadow: var(--app-shadow-md);
+}
+
+button,
+a,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+button {
+  transform: translateZ(0);
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid var(--app-ring);
+  outline-offset: 2px;
+}
+
+input,
+textarea {
+  color: var(--app-text);
+}
+
+::selection {
+  background: var(--app-brand-soft);
+  color: var(--app-text);
 }
 
 .material-symbols-rounded {
@@ -41,24 +117,29 @@ h1, h2, h3, h4, h5, .font-display {
 
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 8px;
+  height: 8px;
 }
 ::-webkit-scrollbar-track {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: #DCDCDC;
-  border-radius: 3px;
+  background: #CAD2DC;
+  border-radius: 999px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #C0C0C0;
+  background: #AEB8C4;
+  background-clip: padding-box;
 }
 .dark ::-webkit-scrollbar-thumb {
-  background: #404040;
+  background: #48515D;
+  background-clip: padding-box;
 }
 .dark ::-webkit-scrollbar-thumb:hover {
-  background: #505050;
+  background: #5A6573;
+  background-clip: padding-box;
 }
 
 .dark .ymaps-2-1-79-map {

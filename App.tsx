@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import Sidebar from './components/Sidebar';
 import StatCard from './components/StatCard';
 import RegionsMap from './components/RegionsMap';
@@ -7,6 +7,7 @@ import AIAssistantWidget from './components/AIAssistantWidget';
 import { Section, SOKBData, SOKBTab, SOKBCriterion, RegionData } from './types';
 import { INITIAL_DATA } from './constants';
 import { getESGInsights } from './services/geminiService';
+import { Language, ruTranslations } from './i18n';
 import { 
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, 
   BarChart, Bar, Cell, PieChart, Pie, AreaChart, Area, RadialBarChart, RadialBar,
@@ -92,6 +93,7 @@ interface Expert {
 
 const App: React.FC = () => {
   const [loading, setLoading] = useState(true);
+  const appRootRef = useRef<HTMLDivElement>(null);
   const [activeSection, setActiveSection] = useState<Section>('overview');
   const [sokbTab, setSokbTab] = useState<SOKBTab>('development');
   const [questionnaireTab, setQuestionnaireTab] = useState('health');
@@ -118,6 +120,13 @@ const App: React.FC = () => {
   const [selectedExpertForConnection, setSelectedExpertForConnection] = useState<Expert | null>(null);
   const [selectedExpertForContact, setSelectedExpertForContact] = useState<Expert | null>(null);
   const [expertMenuOpen, setExpertMenuOpen] = useState<{ id: number; section: string } | null>(null);
+  const [language, setLanguage] = useState<Language>(() => {
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('instat-language');
+      return saved === 'ru' ? 'ru' : 'en';
+    }
+    return 'en';
+  });
 
   // Initialize supporting document samples for 85 indicators
   const [uploadedFiles, setUploadedFiles] = useState<Record<string, string[]>>(() => {
@@ -196,6 +205,76 @@ const App: React.FC = () => {
   const toggleTheme = useCallback(() => {
     setTheme((prev) => (prev === 'light' ? 'dark' : 'light'));
   }, []);
+
+  const toggleLanguage = useCallback(() => {
+    setLanguage((prev) => (prev === 'en' ? 'ru' : 'en'));
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem('instat-language', language);
+  }, [language]);
+
+  useEffect(() => {
+    const root = appRootRef.current;
+    if (!root) return;
+
+    const reverseTranslations = Object.entries(ruTranslations)
+      .sort((a, b) => b[0].length - a[0].length)
+      .reduce<Record<string, string>>((acc, [english, russian]) => {
+        if (!acc[russian]) acc[russian] = english;
+        return acc;
+      }, {});
+    const dictionary = language === 'ru' ? ruTranslations : reverseTranslations;
+    const entries = Object.entries(dictionary)
+      .filter(([source]) => source.length >= 4)
+      .sort((a, b) => b[0].length - a[0].length);
+
+    const translateText = (value: string) => {
+      if (!value.trim()) return value;
+      const leading = value.match(/^\s*/)?.[0] || '';
+      const trailing = value.match(/\s*$/)?.[0] || '';
+      const core = value.trim();
+      if (dictionary[core]) return `${leading}${dictionary[core]}${trailing}`;
+      let translated = core;
+      entries.forEach(([source, target]) => {
+        if (translated.includes(source)) translated = translated.split(source).join(target);
+      });
+      return `${leading}${translated}${trailing}`;
+    };
+
+    const translateElement = (element: Element) => {
+      ['title', 'placeholder', 'alt', 'aria-label'].forEach((attribute) => {
+        const value = element.getAttribute(attribute);
+        if (value) element.setAttribute(attribute, translateText(value));
+      });
+    };
+
+    const translateNode = (node: Node) => {
+      if (node.nodeType === Node.TEXT_NODE && node.textContent) {
+        node.textContent = translateText(node.textContent);
+        return;
+      }
+      if (node.nodeType !== Node.ELEMENT_NODE) return;
+      const element = node as Element;
+      if (element.closest('script, style, .material-symbols-rounded')) return;
+      translateElement(element);
+      element.childNodes.forEach(translateNode);
+    };
+
+    translateNode(root);
+
+    const observer = new MutationObserver((mutations) => {
+      observer.disconnect();
+      mutations.forEach((mutation) => {
+        mutation.addedNodes.forEach(translateNode);
+        if (mutation.type === 'attributes' && mutation.target) translateNode(mutation.target);
+      });
+      observer.observe(root, { childList: true, subtree: true, attributes: true, attributeFilter: ['title', 'placeholder', 'alt', 'aria-label'] });
+    });
+    observer.observe(root, { childList: true, subtree: true, attributes: true, attributeFilter: ['title', 'placeholder', 'alt', 'aria-label'] });
+
+    return () => observer.disconnect();
+  }, [language, loading]);
 
   const toggleSidebar = useCallback(() => {
     setIsSidebarCollapsed(prev => !prev);
@@ -1017,7 +1096,7 @@ const App: React.FC = () => {
   const breadcrumbLabel = getBreadcrumbLabel(activeSection);
 
   return (
-    <div className="min-h-screen bg-atlassian-bg dark:bg-atlassian-darkBg text-atlassian-text dark:text-atlassian-darkText transition-colors flex relative">
+    <div ref={appRootRef} className="min-h-screen bg-atlassian-bg dark:bg-atlassian-darkBg text-atlassian-text dark:text-atlassian-darkText transition-colors flex relative">
       <Sidebar activeSection={activeSection} setActiveSection={setActiveSection} isCollapsed={isSidebarCollapsed} toggleSidebar={toggleSidebar} />
       <main className={`flex-1 ${isSidebarCollapsed ? 'ml-20' : 'ml-72'} p-8 transition-all duration-300`}>
         <header className="flex justify-between items-center mb-8">
@@ -1033,11 +1112,12 @@ const App: React.FC = () => {
               <span className="material-symbols-rounded text-[20px]">settings</span>
             </button>
             <button
-              title="Language: English"
+              onClick={toggleLanguage}
+              title={language === 'en' ? 'Switch to Russian' : 'Switch to English'}
               className="h-10 px-3 rounded-lg flex items-center gap-1.5 text-atlassian-brand hover:bg-white dark:hover:bg-atlassian-darkBorder transition-colors bg-white/70 dark:bg-atlassian-darkSurface border border-atlassian-brand/30 dark:border-atlassian-darkBorder shadow-sm"
             >
               <span className="material-symbols-rounded text-[18px]">translate</span>
-              <span className="text-[11px] font-black uppercase tracking-widest">EN</span>
+              <span className="text-[11px] font-black uppercase tracking-widest">{language.toUpperCase()}</span>
             </button>
             <button
               onClick={toggleTheme}
