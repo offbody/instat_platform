@@ -63,7 +63,7 @@ const StatCard: React.FC<StatCardProps> = ({ title, value, unit, change, icon, c
               {title}
             </p>
             <p className="text-[10px] text-atlassian-subtext dark:text-atlassian-darkSubtext/50 font-medium mt-0.5">
-              {subtitle || 'Текущий показатель'}
+              {subtitle || 'Current indicator'}
             </p>
           </div>
         </div>

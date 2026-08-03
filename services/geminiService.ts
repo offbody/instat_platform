@@ -28,20 +28,20 @@ export const getESGInsights = async (data: SOKBData): Promise<string> => {
   // Always use process.env.API_KEY directly when initializing.
   const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
   
-  const prompt = `Ты - ведущий аналитик Инстат. Составь подробный стратегический отчет о состоянии Стандарта Общественного Капитала Бизнеса (СОКБ) на основе данных:
+  const prompt = `You are a lead InStat analyst. Prepare a detailed strategic report on the Business Social Capital Standard (SOKB) based on the data:
     
-    1. Стратегия и Нацприоритеты: Прогресс ${data.nationalGoalsProgress}%, Эффективность ${data.strategicEfficiency}/100.
-    2. Сотрудники: Индекс здоровья ${data.healthSafetyIndex}/100, Охват ДМС ${data.vhiCoverage}%, Обучение ${data.trainingHours}ч.
-    3. Регионы: Инвестиции ${data.regionalInvestment} млн, Проектов ${data.socialProjectsCount}.
-    4. Экология: Риски ${data.environmentalRiskScore}/100, Проекты ${data.conservationProjects}.
+    1. Strategy and National Priorities: Progress ${data.nationalGoalsProgress}%, Efficiency ${data.strategicEfficiency}/100.
+    2. Employees: Health index ${data.healthSafetyIndex}/100, VHI coverage ${data.vhiCoverage}%, Training ${data.trainingHours}h.
+    3. Regions: investments ${data.regionalInvestment} M, Projects ${data.socialProjectsCount}.
+    4. Environment: risks ${data.environmentalRiskScore}/100, Projects ${data.conservationProjects}.
     
-    Структура отчета (используй профессиональный деловой стиль, заголовки и списки):
-    1. Управленческое резюме (Executive Summary).
-    2. Детальный анализ по 4 векторам СОКБ (сильные стороны и зоны роста).
-    3. Оценка рисков и рекомендации по минимизации.
-    4. Стратегический прогноз на 3 года (качественная оценка).
+    Report structure: use a professional business style, headings, and lists:
+    1. Executive Summary.
+    2. Detailed analysis across 4 SOKB vectors: strengths and growth areas.
+    3. Risk assessment and mitigation recommendations.
+    4. Three-year strategic forecast: qualitative assessment.
     
-    Объем отчета: развернутый, около 300-400 слов.`;
+    Report length: detailed, around 300-400 words.`;
 
   try {
     const result = await retryWithBackoff<GenerateContentResponse>(() => ai.models.generateContent({
@@ -52,10 +52,10 @@ export const getESGInsights = async (data: SOKBData): Promise<string> => {
       }
     }));
     // Use .text property directly as per guidelines
-    return result.text || "Не удалось получить аналитику.";
+    return result.text || "Unable to fetch analytics.";
   } catch (error) {
     console.error("InStat API Error:", error);
-    return "Сервис аналитики временно недоступен. Пожалуйста, попробуйте позже.";
+    return "The analytics service is temporarily unavailable. Please try again later.";
   }
 };
 
@@ -63,9 +63,9 @@ export const askAssistant = async (question: string, data: SOKBData): Promise<st
   // Always use process.env.API_KEY directly when initializing.
   const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
   
-  const prompt = `Ты - ИИ-консультант Инстат по СОКБ и корпоративной социальной ответственности. 
-  Контекст данных компании: ${JSON.stringify(data)}.
-  Ответь на вопрос пользователя кратко и профессионально: ${question}`;
+  const prompt = `You are the InStat AI consultant for SOKB and corporate social responsibility. 
+  Company data context: ${JSON.stringify(data)}.
+  Answer the user question concisely and professionally: ${question}`;
 
   try {
     const result = await retryWithBackoff<GenerateContentResponse>(() => ai.models.generateContent({
@@ -76,10 +76,10 @@ export const askAssistant = async (question: string, data: SOKBData): Promise<st
       }
     }));
     // Use .text property directly as per guidelines
-    return result.text || "Извините, я не смог сформулировать ответ.";
+    return result.text || "Sorry, I could not formulate an answer.";
   } catch (error) {
     console.error("InStat API Error:", error);
-    return "Извините, сервис временно перегружен. Попробуйте повторить запрос через минуту.";
+    return "Sorry, the service is temporarily overloaded. Please try again in a minute.";
   }
 };
 

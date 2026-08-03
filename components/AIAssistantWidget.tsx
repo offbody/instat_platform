@@ -13,7 +13,7 @@ const AVATAR_URL = "https://raw.githubusercontent.com/offbody/instat_platform/ma
 const AIAssistantWidget: React.FC<AIAssistantWidgetProps> = ({ data, theme }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<{ role: 'user' | 'ai'; text: string }[]>([
-    { role: 'ai', text: 'Здравствуйте! Я ваш ИИ-помощник Инстат. Чем могу помочь с анализом СОКБ показателей сегодня?' }
+    { role: 'ai', text: 'Hello! I am your InStat AI assistant. How can I help with SOKB indicator analysis today?' }
   ]);
   const [inputValue, setInputValue] = useState('');
   const [isThinking, setIsThinking] = useState(false);
@@ -30,13 +30,13 @@ const AIAssistantWidget: React.FC<AIAssistantWidgetProps> = ({ data, theme }) =>
   const handleQuickAnalysis = async () => {
     setIsThinking(true);
     setIsOpen(true);
-    setMessages(prev => [...prev, { role: 'user', text: 'Проведи экспресс-анализ текущего состояния СОКБ.' }]);
+    setMessages(prev => [...prev, { role: 'user', text: 'Run a quick analysis of the current SOKB status.' }]);
     
     try {
       const insight = await getESGInsights(data);
       setMessages(prev => [...prev, { role: 'ai', text: insight }]);
     } catch (err) {
-      setMessages(prev => [...prev, { role: 'ai', text: 'К сожалению, не удалось получить аналитику сейчас.' }]);
+      setMessages(prev => [...prev, { role: 'ai', text: 'Unfortunately, analytics are unavailable right now.' }]);
     } finally {
       setIsThinking(false);
     }
@@ -55,7 +55,7 @@ const AIAssistantWidget: React.FC<AIAssistantWidgetProps> = ({ data, theme }) =>
       const response = await askAssistant(userText, data);
       setMessages(prev => [...prev, { role: 'ai', text: response }]);
     } catch (err) {
-      setMessages(prev => [...prev, { role: 'ai', text: 'Ошибка при обработке запроса.' }]);
+      setMessages(prev => [...prev, { role: 'ai', text: 'Error processing the request.' }]);
     } finally {
       setIsThinking(false);
     }
@@ -73,10 +73,10 @@ const AIAssistantWidget: React.FC<AIAssistantWidgetProps> = ({ data, theme }) =>
                 <img src={AVATAR_URL} alt="AI Avatar" className="w-full h-full object-cover" />
               </div>
               <div>
-                <h3 className="text-xs font-bold text-atlassian-text dark:text-white uppercase tracking-wider">Консультант Инстат AI</h3>
+                <h3 className="text-xs font-bold text-atlassian-text dark:text-white uppercase tracking-wider">InStat AI Consultant</h3>
                 <div className="flex items-center gap-1.5 mt-0.5">
                   <span className="w-1.5 h-1.5 rounded-full bg-atlassian-success animate-pulse"></span>
-                  <span className="text-[10px] text-atlassian-subtext dark:text-atlassian-darkSubtext font-bold uppercase tracking-wide">В сети</span>
+                  <span className="text-[10px] text-atlassian-subtext dark:text-atlassian-darkSubtext font-bold uppercase tracking-wide">Online</span>
                 </div>
               </div>
             </div>
@@ -133,7 +133,7 @@ const AIAssistantWidget: React.FC<AIAssistantWidgetProps> = ({ data, theme }) =>
                 <div className="w-5 h-5 rounded bg-atlassian-brand/10 flex items-center justify-center text-atlassian-brand shrink-0">
                   <span className="material-symbols-rounded text-[14px]">bar_chart</span>
                 </div>
-                Экспресс-анализ СОКБ
+                Quick SOKB Analysis
               </button>
             </div>
           )}
@@ -145,7 +145,7 @@ const AIAssistantWidget: React.FC<AIAssistantWidgetProps> = ({ data, theme }) =>
                 type="text"
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
-                placeholder="Спросите ассистента..."
+                placeholder="Ask the assistant..."
                 className={`w-full h-10 pl-4 pr-12 text-sm rounded-lg border focus:ring-2 focus:ring-atlassian-brand focus:border-transparent outline-none transition-all ${
                   theme === 'dark' 
                   ? 'bg-atlassian-darkBg border-atlassian-darkBorder text-white placeholder-atlassian-darkSubtext' 

@@ -27,7 +27,7 @@ const RegionsMap: React.FC<RegionsMapProps> = ({ regions, onSelectRegion, select
       }
 
       const map = new window.ymaps.Map(mapContainerRef.current, {
-        center: [60, 95], // Центр России
+        center: [60, 95], // Center of Russia
         zoom: 3,
         controls: ['zoomControl', 'fullscreenControl']
       }, {
@@ -39,7 +39,7 @@ const RegionsMap: React.FC<RegionsMapProps> = ({ regions, onSelectRegion, select
       regions.forEach((region) => {
         const placemark = new window.ymaps.Placemark(region.coords, {
           hintContent: region.name,
-          balloonContent: `<strong>${region.name}</strong><br/>Инвестиции: ${region.investment} млн`
+          balloonContent: `<strong>${region.name}</strong><br/>Investment: ${region.investment} M`
         }, {
           preset: 'islands#blueDotIcon',
           iconColor: selectedRegionId === region.id ? '#16AB16' : '#0052CC'

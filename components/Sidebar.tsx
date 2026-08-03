@@ -11,14 +11,14 @@ interface SidebarProps {
 
 const Sidebar: React.FC<SidebarProps> = ({ activeSection, setActiveSection, isCollapsed, toggleSidebar }) => {
   const menuItems: { id: Section; label: string; icon: string }[] = [
-    { id: 'overview', label: 'Обзор', icon: 'dashboard' },
-    { id: 'strategy', label: 'Стратегия', icon: 'track_changes' },
-    { id: 'employees', label: 'Сотрудники', icon: 'groups' },
-    { id: 'regions', label: 'Регионы', icon: 'location_on' },
-    { id: 'environment', label: 'Экология', icon: 'eco' },
-    { id: 'ai-insights', label: 'ИИ-Аналитика', icon: 'auto_awesome' },
-    { id: 'questionnaire', label: 'Анкета СОКБ', icon: 'assignment' },
-    { id: 'experts', label: 'База экспертов', icon: 'school' },
+    { id: 'overview', label: 'Overview', icon: 'dashboard' },
+    { id: 'strategy', label: 'Strategy', icon: 'track_changes' },
+    { id: 'employees', label: 'Employees', icon: 'groups' },
+    { id: 'regions', label: 'Regions', icon: 'location_on' },
+    { id: 'environment', label: 'Environment', icon: 'eco' },
+    { id: 'ai-insights', label: 'AI Analytics', icon: 'auto_awesome' },
+    { id: 'questionnaire', label: 'SOKB Questionnaire', icon: 'assignment' },
+    { id: 'experts', label: 'Expert Network', icon: 'school' },
   ];
 
   return (
@@ -27,32 +27,32 @@ const Sidebar: React.FC<SidebarProps> = ({ activeSection, setActiveSection, isCo
         <div className={`flex items-center gap-3 ${isCollapsed ? 'justify-center mb-0' : 'mb-6'}`}>
           <img 
             src="https://raw.githubusercontent.com/offbody/instat_platform/main/media/instat-sign.svg" 
-            alt="Инстат" 
+            alt="InStat" 
             className="w-10 h-10 shrink-0" 
           />
           {!isCollapsed && (
             <div className="overflow-hidden whitespace-nowrap animate-in fade-in duration-300">
-              <h1 className="text-base font-bold tracking-tight text-atlassian-text dark:text-atlassian-darkText uppercase leading-none">ПЛАТФОРМА ИНСТАТ</h1>
-              <p className="text-[10px] text-atlassian-subtext dark:text-atlassian-darkSubtext uppercase tracking-widest font-bold mt-0.5">ОЗНАКОМИТЕЛЬНЫЙ РЕЖИМ</p>
+              <h1 className="text-base font-bold tracking-tight text-atlassian-text dark:text-atlassian-darkText uppercase leading-none">INSTAT PLATFORM</h1>
+              <p className="text-[10px] text-atlassian-subtext dark:text-atlassian-darkSubtext uppercase tracking-widest font-bold mt-0.5">DEMO MODE</p>
             </div>
           )}
         </div>
 
-        {/* Обновленный блок Инстат-Индекс по макету "Инстат Статус" */}
+        {/* Updated InStat Index block based on the InStat Status layout */}
         {!isCollapsed && (
           <div className="bg-[#F7F7F7] dark:bg-white/5 rounded-xl p-5 relative animate-in fade-in zoom-in-95 duration-300 border border-transparent dark:border-atlassian-darkBorder/50">
              <div className="mb-4">
-               <h3 className="text-[12px] font-bold text-atlassian-text dark:text-white uppercase leading-tight mb-1 tracking-tight truncate" title="ООО «МОЯ КОМПАНИЯ»">
-                  ООО «МОЯ КОМПАНИЯ»
+               <h3 className="text-[12px] font-bold text-atlassian-text dark:text-white uppercase leading-tight mb-1 tracking-tight truncate" title="MY COMPANY LLC">
+                  MY COMPANY LLC
                </h3>
                <p className="text-[10px] text-atlassian-subtext dark:text-atlassian-darkSubtext font-bold leading-tight tracking-tight opacity-80">
-                 ОГРН 1234567898765
+                 Reg. No. 1234567898765
                </p>
              </div>
 
              <div className="flex flex-wrap gap-2 mb-4">
-                <span className="px-2 py-0.5 bg-[#DCFCE7] dark:bg-[#14532D] text-[#166534] dark:text-[#BBF7D0] rounded text-[9px] font-bold uppercase tracking-wide">РАЗВИТИЕ+</span>
-                <span className="px-2 py-0.5 bg-[#F3E8FF] dark:bg-[#581C87] text-[#6B21A8] dark:text-[#E9D5FF] rounded text-[9px] font-bold uppercase tracking-wide">ТОП-50</span>
+                <span className="px-2 py-0.5 bg-[#DCFCE7] dark:bg-[#14532D] text-[#166534] dark:text-[#BBF7D0] rounded text-[9px] font-bold uppercase tracking-wide">GROWTH+</span>
+                <span className="px-2 py-0.5 bg-[#F3E8FF] dark:bg-[#581C87] text-[#6B21A8] dark:text-[#E9D5FF] rounded text-[9px] font-bold uppercase tracking-wide">TOP-50</span>
              </div>
 
              <div className="w-full bg-[#E5E7EB] dark:bg-white/10 h-1.5 rounded-full overflow-hidden mb-3">
@@ -60,15 +60,15 @@ const Sidebar: React.FC<SidebarProps> = ({ activeSection, setActiveSection, isCo
              </div>
 
              <div className="flex justify-between items-center gap-2">
-                <p className="text-[9px] text-atlassian-subtext dark:text-atlassian-darkSubtext font-medium opacity-80 uppercase tracking-tight whitespace-nowrap">Обновлено 24.02.26</p>
-                <span className="px-2 py-0.5 bg-[#E5E7EB] dark:bg-[#374151] text-[#374151] dark:text-[#D1D5DB] rounded text-[9px] font-bold uppercase tracking-wider truncate">КРУПНЫЙ БИЗНЕС</span>
+                <p className="text-[9px] text-atlassian-subtext dark:text-atlassian-darkSubtext font-medium opacity-80 uppercase tracking-tight whitespace-nowrap">Updated 02/24/26</p>
+                <span className="px-2 py-0.5 bg-[#E5E7EB] dark:bg-[#374151] text-[#374151] dark:text-[#D1D5DB] rounded text-[9px] font-bold uppercase tracking-wider truncate">LARGE BUSINESS</span>
              </div>
           </div>
         )}
       </div>
       
       <nav className="flex-1 px-3 mt-4 overflow-y-auto scrollbar-hide">
-        <p className={`text-[10px] font-bold text-atlassian-subtext uppercase tracking-widest mb-2 px-3 ${isCollapsed ? 'hidden' : ''}`}>Меню</p>
+        <p className={`text-[10px] font-bold text-atlassian-subtext uppercase tracking-widest mb-2 px-3 ${isCollapsed ? 'hidden' : ''}`}>Menu</p>
         <ul className="space-y-1">
           {menuItems.map((item) => (
             <li key={item.id}>
@@ -95,7 +95,7 @@ const Sidebar: React.FC<SidebarProps> = ({ activeSection, setActiveSection, isCo
             <div className="flex items-center gap-3">
                 <div className="w-8 h-8 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center text-[10px] font-bold text-gray-500 shadow-sm border border-white dark:border-gray-600">MK</div>
                 <div className="flex flex-col">
-                   <span className="text-[11px] font-bold text-atlassian-text dark:text-white leading-none">Моя Компания</span>
+                   <span className="text-[11px] font-bold text-atlassian-text dark:text-white leading-none">My Company</span>
                    <span className="text-[9px] text-atlassian-subtext">Corp ID: 9942</span>
                 </div>
             </div>
