@@ -2,6 +2,9 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { SOKBData } from '../types';
 import { getESGInsights, askAssistant } from '../services/geminiService';
+import { Button } from './ui/button';
+import { Card } from './ui/card';
+import { Input } from './ui/input';
 
 interface AIAssistantWidgetProps {
   data: SOKBData;
@@ -65,7 +68,7 @@ const AIAssistantWidget: React.FC<AIAssistantWidgetProps> = ({ data, theme }) =>
     <div className="fixed bottom-6 right-6 flex flex-col items-end z-[9999]">
       {/* Widget Panel */}
       {isOpen && (
-        <div className={`atl-card mb-4 w-[380px] h-[600px] flex flex-col overflow-hidden animate-in slide-in-from-bottom-5 fade-in duration-300 ${theme === 'dark' ? 'bg-atlassian-darkSurface border-atlassian-darkBorder shadow-2xl shadow-black/40' : 'bg-white shadow-2xl shadow-atlassian-brand/10'}`}>
+        <Card className={`mb-4 w-[380px] h-[600px] flex flex-col overflow-hidden animate-in slide-in-from-bottom-5 fade-in duration-300 ${theme === 'dark' ? 'shadow-2xl shadow-black/40' : 'shadow-2xl shadow-atlassian-brand/10'}`}>
           {/* Header */}
           <div className="p-4 border-b border-atlassian-border dark:border-atlassian-darkBorder flex items-center justify-between bg-gradient-to-r from-atlassian-brand/5 to-atlassian-info/5">
             <div className="flex items-center gap-3">
@@ -80,12 +83,13 @@ const AIAssistantWidget: React.FC<AIAssistantWidgetProps> = ({ data, theme }) =>
                 </div>
               </div>
             </div>
-            <button 
+            <Button 
               onClick={() => setIsOpen(false)}
-              className="w-8 h-8 rounded-lg flex items-center justify-center text-atlassian-subtext hover:bg-black/5 dark:hover:bg-white/5 transition-colors"
+              variant="ghost"
+              size="icon-sm"
             >
               <span className="material-symbols-rounded text-[20px]">close</span>
-            </button>
+            </Button>
           </div>
 
           {/* Messages Area */}
@@ -126,57 +130,56 @@ const AIAssistantWidget: React.FC<AIAssistantWidgetProps> = ({ data, theme }) =>
           {/* Quick Actions */}
           {messages.length < 3 && !isThinking && (
             <div className="px-4 pb-3 flex gap-2 overflow-x-auto scrollbar-hide">
-              <button 
+              <Button 
                 onClick={handleQuickAnalysis}
-                className="whitespace-nowrap flex items-center gap-2 px-3 py-1.5 rounded-lg border border-atlassian-subtext/30 bg-white dark:bg-atlassian-darkSurface text-atlassian-subtext dark:text-atlassian-darkSubtext text-[10px] font-bold uppercase hover:bg-atlassian-bg dark:hover:bg-atlassian-darkBg hover:text-atlassian-text dark:hover:text-white transition-all shadow-sm"
+                variant="outline"
+                size="sm"
+                className="whitespace-nowrap text-[10px]"
               >
                 <div className="w-5 h-5 rounded bg-atlassian-brand/10 flex items-center justify-center text-atlassian-brand shrink-0">
                   <span className="material-symbols-rounded text-[14px]">bar_chart</span>
                 </div>
                 Quick SOKB Analysis
-              </button>
+              </Button>
             </div>
           )}
 
           {/* Input Area */}
           <form onSubmit={handleSendMessage} className="p-4 border-t border-atlassian-border dark:border-atlassian-darkBorder bg-white dark:bg-atlassian-darkSurface">
             <div className="relative">
-              <input 
+              <Input 
                 type="text"
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
                 placeholder="Ask the assistant..."
-                className={`w-full h-10 pl-4 pr-12 text-sm rounded-lg border focus:ring-2 focus:ring-atlassian-brand focus:border-transparent outline-none transition-all ${
-                  theme === 'dark' 
-                  ? 'bg-atlassian-darkBg border-atlassian-darkBorder text-white placeholder-atlassian-darkSubtext' 
-                  : 'bg-atlassian-bg border-atlassian-border text-atlassian-text'
-                }`}
+                className="pr-12"
               />
-              <button 
+              <Button 
                 type="submit"
                 disabled={!inputValue.trim() || isThinking}
-                className={`absolute right-1 top-1 h-8 w-8 rounded-lg flex items-center justify-center transition-all ${
-                  inputValue.trim() && !isThinking ? 'bg-atlassian-brand text-white shadow-sm hover:bg-atlassian-brandHover' : 'text-atlassian-subtext opacity-50'
-                }`}
+                size="icon-sm"
+                variant={inputValue.trim() && !isThinking ? 'default' : 'ghost'}
+                className="absolute right-1 top-1"
               >
                 <span className="material-symbols-rounded text-[20px]">send</span>
-              </button>
+              </Button>
             </div>
           </form>
-        </div>
+        </Card>
       )}
 
       {/* Floating Toggle Button */}
-      <button 
+      <Button 
         onClick={() => setIsOpen(!isOpen)}
-        className={`w-14 h-14 rounded-full flex items-center justify-center text-white shadow-xl shadow-atlassian-brand/30 transition-all hover:scale-105 active:scale-95 group overflow-hidden ${isOpen ? 'bg-atlassian-text dark:bg-atlassian-darkBorder' : 'bg-white p-0 border-2 border-atlassian-brand'}`}
+        size="icon"
+        className={`w-14 h-14 rounded-full text-white shadow-xl shadow-atlassian-brand/30 transition-all hover:scale-105 active:scale-95 group overflow-hidden ${isOpen ? 'bg-atlassian-text dark:bg-atlassian-darkBorder' : 'bg-white p-0 border-2 border-atlassian-brand hover:bg-white'}`}
       >
         {isOpen ? (
              <span className="material-symbols-rounded text-[28px] transition-transform duration-300 rotate-90">expand_more</span>
         ) : (
              <img src={AVATAR_URL} alt="Open Chat" className="w-full h-full object-cover" />
         )}
-      </button>
+      </Button>
     </div>
   );
 };

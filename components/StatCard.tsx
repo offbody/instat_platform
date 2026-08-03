@@ -1,6 +1,8 @@
 
 import React, { useId } from 'react';
 import { AreaChart, Area, ResponsiveContainer, CartesianGrid, YAxis, XAxis, Tooltip } from 'recharts';
+import { Card } from './ui/card';
+import { cn } from '../lib/utils';
 
 interface SubMetric {
   label: string;
@@ -51,11 +53,11 @@ const StatCard: React.FC<StatCardProps> = ({ title, value, unit, change, icon, c
   const iconBgClass = getIconBgClass(color);
 
   return (
-    <div className="p-5 bg-white dark:bg-atlassian-darkSurface rounded-xl border border-atlassian-border dark:border-atlassian-darkBorder flex flex-col transition-all hover:shadow-atl-hover group">
+    <Card className="group flex flex-col p-5">
       {/* Header */}
       <div className="flex items-start justify-between mb-4">
         <div className="flex gap-3 items-center">
-          <div className={`w-10 h-10 rounded-lg flex items-center justify-center shadow-sm shrink-0 border border-transparent ${iconBgClass} dark:bg-white/5`}>
+          <div className={cn('w-10 h-10 rounded-lg flex items-center justify-center shadow-sm shrink-0 border border-transparent dark:bg-white/5', iconBgClass)}>
             <span className={`material-symbols-rounded text-[20px] ${color}`}>{icon}</span>
           </div>
           <div>
@@ -136,7 +138,7 @@ const StatCard: React.FC<StatCardProps> = ({ title, value, unit, change, icon, c
           ))}
         </div>
       )}
-    </div>
+    </Card>
   );
 };
 

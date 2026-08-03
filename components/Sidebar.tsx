@@ -1,6 +1,10 @@
 
 import React from 'react';
 import { Section } from '../types';
+import { Badge } from './ui/badge';
+import { Button } from './ui/button';
+import { Card } from './ui/card';
+import { cn } from '../lib/utils';
 
 interface SidebarProps {
   activeSection: Section;
@@ -40,7 +44,7 @@ const Sidebar: React.FC<SidebarProps> = ({ activeSection, setActiveSection, isCo
 
         {/* Updated InStat Index block based on the InStat Status layout */}
         {!isCollapsed && (
-          <div className="bg-[#F7F7F7] dark:bg-white/5 rounded-xl p-5 relative animate-in fade-in zoom-in-95 duration-300 border border-transparent dark:border-atlassian-darkBorder/50">
+          <Card className="relative animate-in fade-in zoom-in-95 duration-300 p-5 shadow-none">
              <div className="mb-4">
                <h3 className="text-[12px] font-bold text-atlassian-text dark:text-white uppercase leading-tight mb-1 tracking-tight truncate" title="MY COMPANY LLC">
                   MY COMPANY LLC
@@ -51,8 +55,8 @@ const Sidebar: React.FC<SidebarProps> = ({ activeSection, setActiveSection, isCo
              </div>
 
              <div className="flex flex-wrap gap-2 mb-4">
-                <span className="px-2 py-0.5 bg-[#DCFCE7] dark:bg-[#14532D] text-[#166534] dark:text-[#BBF7D0] rounded text-[9px] font-bold uppercase tracking-wide">GROWTH+</span>
-                <span className="px-2 py-0.5 bg-[#F3E8FF] dark:bg-[#581C87] text-[#6B21A8] dark:text-[#E9D5FF] rounded text-[9px] font-bold uppercase tracking-wide">TOP-50</span>
+                <Badge variant="success">GROWTH+</Badge>
+                <Badge className="bg-[#F3E8FF] text-[#6B21A8] dark:bg-[#581C87] dark:text-[#E9D5FF]">TOP-50</Badge>
              </div>
 
              <div className="w-full bg-[#E5E7EB] dark:bg-white/10 h-1.5 rounded-full overflow-hidden mb-3">
@@ -61,9 +65,9 @@ const Sidebar: React.FC<SidebarProps> = ({ activeSection, setActiveSection, isCo
 
              <div className="flex justify-between items-center gap-2">
                 <p className="text-[9px] text-atlassian-subtext dark:text-atlassian-darkSubtext font-medium opacity-80 uppercase tracking-tight whitespace-nowrap">Updated 02/24/26</p>
-                <span className="px-2 py-0.5 bg-[#E5E7EB] dark:bg-[#374151] text-[#374151] dark:text-[#D1D5DB] rounded text-[9px] font-bold uppercase tracking-wider truncate">LARGE BUSINESS</span>
+                <Badge variant="muted" className="truncate tracking-wider">LARGE BUSINESS</Badge>
              </div>
-          </div>
+          </Card>
         )}
       </div>
       
@@ -72,18 +76,21 @@ const Sidebar: React.FC<SidebarProps> = ({ activeSection, setActiveSection, isCo
         <ul className="space-y-1">
           {menuItems.map((item) => (
             <li key={item.id}>
-              <button
+              <Button
                 onClick={() => setActiveSection(item.id)}
                 title={isCollapsed ? item.label : ''}
-                className={`w-full flex items-center ${isCollapsed ? 'justify-center px-0' : 'space-x-3 px-3'} h-10 rounded-lg transition-all text-[11px] font-bold uppercase tracking-wide ${
+                variant="ghost"
+                className={cn(
+                  'w-full',
+                  isCollapsed ? 'justify-center px-0' : 'justify-start space-x-3 px-3',
                   activeSection === item.id
-                    ? 'bg-atlassian-text text-white shadow-md dark:bg-atlassian-darkBorder dark:text-white'
+                    ? 'bg-atlassian-text text-white shadow-md hover:bg-atlassian-text dark:bg-atlassian-darkBorder dark:text-white'
                     : 'text-atlassian-subtext dark:text-atlassian-darkSubtext hover:bg-atlassian-bg dark:hover:bg-white/5 hover:text-atlassian-text dark:hover:text-atlassian-darkText'
-                }`}
+                )}
               >
                 <span className={`material-symbols-rounded ${activeSection === item.id ? 'opacity-100' : 'opacity-70'} shrink-0 text-[20px]`}>{item.icon}</span>
                 {!isCollapsed && <span className="whitespace-nowrap overflow-hidden text-ellipsis animate-in fade-in duration-300">{item.label}</span>}
-              </button>
+              </Button>
             </li>
           ))}
         </ul>
@@ -100,12 +107,14 @@ const Sidebar: React.FC<SidebarProps> = ({ activeSection, setActiveSection, isCo
                 </div>
             </div>
         )}
-        <button
+        <Button
             onClick={toggleSidebar}
-            className="w-8 h-8 flex items-center justify-center rounded-lg text-atlassian-subtext hover:bg-atlassian-bg dark:hover:bg-white/10 transition-all cursor-pointer hover:text-atlassian-text"
+            variant="ghost"
+            size="icon-sm"
+            className="text-atlassian-subtext hover:text-atlassian-text"
         >
              <span className="material-symbols-rounded text-[20px]">{isCollapsed ? 'keyboard_double_arrow_right' : 'keyboard_double_arrow_left'}</span>
-        </button>
+        </Button>
       </div>
     </div>
   );

@@ -8,6 +8,11 @@ import { Section, SOKBData, SOKBTab, SOKBCriterion, RegionData } from './types';
 import { INITIAL_DATA } from './constants';
 import { getESGInsights } from './services/geminiService';
 import { Language, ruTranslations } from './i18n';
+import { Badge } from './components/ui/badge';
+import { Button } from './components/ui/button';
+import { Input } from './components/ui/input';
+import { TabsList, TabsTrigger } from './components/ui/tabs';
+import { cn } from './lib/utils';
 import { 
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, 
   BarChart, Bar, Cell, PieChart, Pie, AreaChart, Area, RadialBarChart, RadialBar,
@@ -578,13 +583,13 @@ const App: React.FC = () => {
               </div>
               
               <div className="h-4 w-px bg-atlassian-border dark:bg-atlassian-darkBorder"></div>
-              <div className="flex flex-wrap gap-1 bg-atlassian-bg dark:bg-atlassian-darkBg p-1 rounded-lg">
+              <TabsList>
                 {sokbTabs.map((tab) => (
-                  <button key={tab.id} onClick={() => setSokbTab(tab.id)} className={`flex items-center gap-2 px-3 py-1.5 rounded-md text-[11px] font-bold uppercase tracking-wide transition-all ${sokbTab === tab.id ? 'bg-white text-atlassian-text shadow-sm dark:bg-atlassian-darkSurface dark:text-white' : 'text-atlassian-subtext dark:text-atlassian-darkSubtext hover:text-atlassian-text dark:hover:text-white'}`}>
-                    <span className={`material-symbols-rounded text-[16px] ${sokbTab === tab.id ? 'text-atlassian-brand' : ''}`}>{tab.icon}</span><span>{tab.label}</span>
-                  </button>
+                  <TabsTrigger key={tab.id} active={sokbTab === tab.id} onClick={() => setSokbTab(tab.id)}>
+                    <span className={cn('material-symbols-rounded text-[16px]', sokbTab === tab.id && 'text-atlassian-brand')}>{tab.icon}</span><span>{tab.label}</span>
+                  </TabsTrigger>
                 ))}
-              </div>
+              </TabsList>
             </div>
           </div>
           <div className="flex-1 flex-col gap-6 h-full flex">
@@ -865,7 +870,7 @@ const App: React.FC = () => {
                           <div className="flex flex-col gap-4">
                             <div className="flex flex-wrap items-center gap-4">{metric.type === 'number' && (<div className="flex items-center gap-3"><div className="relative w-40 flex items-center"><button className="absolute left-1 top-1 bottom-1 w-8 h-8 rounded-lg hover:bg-atlassian-border dark:hover:bg-atlassian-darkBorder flex items-center justify-center text-atlassian-subtext transition-colors z-10"><span className="material-symbols-rounded text-[18px]">remove</span></button><input type="number" placeholder="0" className="w-full h-10 pl-10 pr-10 text-center rounded-lg border border-atlassian-border dark:border-atlassian-darkBorder bg-atlassian-bg/50 dark:bg-atlassian-darkBg/50 focus:ring-2 focus:ring-atlassian-brand focus:border-transparent outline-none transition-all text-sm font-bold text-atlassian-text dark:text-white" /><button className="absolute right-1 top-1 bottom-1 w-8 h-8 rounded-lg hover:bg-atlassian-border dark:hover:bg-atlassian-darkBorder flex items-center justify-center text-atlassian-subtext transition-colors z-10"><span className="material-symbols-rounded text-[18px]">add</span></button></div>{metric.unit && (<span className="text-xs text-atlassian-subtext font-medium">{metric.unit}</span>)}</div>)}{metric.type === 'boolean' && (<div className="flex bg-atlassian-bg dark:bg-atlassian-darkBg p-1 rounded-lg"><button className="px-6 py-2 rounded-md text-xs font-bold text-atlassian-subtext hover:text-atlassian-text hover:bg-white dark:hover:bg-atlassian-darkSurface transition-all">Yes</button><button className="px-6 py-2 rounded-md text-xs font-bold text-atlassian-subtext hover:text-atlassian-text hover:bg-white dark:hover:bg-atlassian-darkSurface transition-all">No</button></div>)}{metric.type === 'table' && (<div className="flex flex-wrap items-center gap-3"><div className="relative w-40 flex items-center"><button className="absolute left-1 top-1 bottom-1 w-8 h-8 rounded-lg hover:bg-atlassian-border dark:hover:bg-atlassian-darkBorder flex items-center justify-center text-atlassian-subtext transition-colors z-10"><span className="material-symbols-rounded text-[18px]">remove</span></button><input type="number" placeholder="0" className="w-full h-10 pl-10 pr-10 text-center rounded-lg border border-atlassian-border dark:border-atlassian-darkBorder bg-atlassian-bg/50 dark:bg-atlassian-darkBg/50 focus:ring-2 focus:ring-atlassian-brand focus:border-transparent outline-none transition-all text-sm font-bold text-atlassian-text dark:text-white" /><button className="absolute right-1 top-1 bottom-1 w-8 h-8 rounded-lg hover:bg-atlassian-border dark:hover:bg-atlassian-darkBorder flex items-center justify-center text-atlassian-subtext transition-colors z-10"><span className="material-symbols-rounded text-[18px]">add</span></button></div>{metric.unit && (<span className="text-xs text-atlassian-subtext font-medium">{metric.unit}</span>)}<button className="flex items-center gap-2 h-10 px-4 bg-atlassian-brand/10 text-atlassian-brand text-xs font-bold rounded-lg hover:bg-atlassian-brand/20 transition-colors whitespace-nowrap ml-2"><span className="material-symbols-rounded text-[16px]">grid_on</span>Details</button></div>)}</div>
                             {uploadedFiles[metric.id] && uploadedFiles[metric.id].length > 0 && metric.type !== 'boolean' && (<div className="mt-3 flex justify-start animate-in fade-in slide-in-from-top-1 duration-500"><div className="inline-flex items-center px-4 py-2.5 rounded-lg bg-teal-50 dark:bg-teal-900/30 border border-teal-100 dark:border-teal-800/50"><span className="material-symbols-rounded text-teal-700 dark:text-teal-300 mr-2 text-[18px]" style={{ fontVariationSettings: "'FILL' 1, 'wght' 500, 'GRAD' 0, 'opsz' 24" }}>show_chart</span><span className="text-[10px] font-bold text-teal-700 dark:text-teal-300 uppercase tracking-wide mr-3">InStat AI estimate</span><div className="flex items-baseline gap-1.5 mr-4"><span className="text-sm font-bold text-atlassian-text dark:text-white">{getAiEstimate(metric)}</span>{metric.unit && (<span className="text-[10px] font-medium text-atlassian-text/60 dark:text-white/60">{metric.unit}</span>)}</div><button className="px-3 py-1 bg-teal-600 hover:bg-teal-700 text-white text-[9px] font-black uppercase rounded shadow-sm transition-colors tracking-widest active:scale-95">Apply</button></div></div>)}
-                            <div className="mt-4 flex flex-col gap-3 border-t border-atlassian-border/50 dark:border-atlassian-darkBorder/50 pt-4"><div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4"><div className="flex flex-col gap-2"><div className="flex items-center gap-3"><button className="flex items-center gap-2 h-9 px-4 bg-atlassian-brand/5 text-atlassian-brand dark:bg-atlassian-brand/10 dark:text-white text-xs font-bold rounded-lg hover:bg-atlassian-brand/10 dark:hover:bg-atlassian-brand/20 transition-colors"><span className="material-symbols-rounded text-[18px]" style={{ fontVariationSettings: "'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24" }}>upload</span>Upload supporting documents</button><span className="text-[10px] text-atlassian-subtext select-none italic hidden sm:block">Drag files here</span></div></div></div>{uploadedFiles[metric.id] && uploadedFiles[metric.id].length > 0 && (<div className="mt-4 p-4 border border-dashed border-[#CBD1DB] rounded-[6px] bg-white/50 dark:bg-white/5"><div className="flex items-center gap-2 mb-3"><p className="text-[10px] font-black text-black dark:text-white uppercase tracking-widest leading-none">Uploaded files ({uploadedFiles[metric.id].length})</p></div><div className="flex flex-wrap gap-2">{uploadedFiles[metric.id].map((file, fIdx) => (<div key={fIdx} className="flex items-center gap-2 px-3 py-1.5 bg-[#F5F5F5] dark:bg-atlassian-darkBg/50 border border-[#EDEBE9] dark:border-atlassian-darkBorder rounded-lg shadow-sm group/file animate-in fade-in zoom-in-95 duration-200"><span className="material-symbols-rounded text-atlassian-subtext text-[16px]">{file.endsWith('.pdf') ? 'picture_as_pdf' : 'description'}</span><span className="text-[11px] font-medium text-atlassian-text dark:text-atlassian-darkText truncate max-w-[200px]">{file}</span><button onClick={() => removeFile(metric.id, file)} className="ml-1 text-atlassian-subtext hover:text-atlassian-error opacity-0 group-hover/file:opacity-100 transition-all"><span className="material-symbols-rounded text-[14px]">cancel</span></button></div>))}</div></div>)}</div>
+                            <div className="mt-4 flex flex-col gap-3 border-t border-atlassian-border/50 dark:border-atlassian-darkBorder/50 pt-4"><div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4"><div className="flex flex-col gap-2"><div className="flex items-center gap-3"><Button variant="secondary" size="sm" className="text-xs text-atlassian-brand dark:text-white"><span className="material-symbols-rounded text-[18px]" style={{ fontVariationSettings: "'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24" }}>upload</span>Upload supporting documents</Button><span className="text-[10px] text-atlassian-subtext select-none italic hidden sm:block">Drag files here</span></div></div></div>{uploadedFiles[metric.id] && uploadedFiles[metric.id].length > 0 && (<div className="mt-4 p-4 border border-dashed border-[#CBD1DB] rounded-[6px] bg-white/50 dark:bg-white/5"><div className="flex items-center gap-2 mb-3"><p className="text-[10px] font-black text-black dark:text-white uppercase tracking-widest leading-none">Uploaded files ({uploadedFiles[metric.id].length})</p></div><div className="flex flex-wrap gap-2">{uploadedFiles[metric.id].map((file, fIdx) => (<div key={fIdx} className="flex items-center gap-2 px-3 py-1.5 bg-[#F5F5F5] dark:bg-atlassian-darkBg/50 border border-[#EDEBE9] dark:border-atlassian-darkBorder rounded-lg shadow-sm group/file animate-in fade-in zoom-in-95 duration-200"><span className="material-symbols-rounded text-atlassian-subtext text-[16px]">{file.endsWith('.pdf') ? 'picture_as_pdf' : 'description'}</span><span className="text-[11px] font-medium text-atlassian-text dark:text-atlassian-darkText truncate max-w-[200px]">{file}</span><button onClick={() => removeFile(metric.id, file)} className="ml-1 text-atlassian-subtext hover:text-atlassian-error opacity-0 group-hover/file:opacity-100 transition-all"><span className="material-symbols-rounded text-[14px]">cancel</span></button></div>))}</div></div>)}</div>
                           </div>
                         </div>
                       ))
@@ -930,7 +935,20 @@ const App: React.FC = () => {
     ];
     return (
       <div className="space-y-6 animate-in fade-in duration-500">
-        <div className="p-4 rounded-xl border border-atlassian-border dark:border-atlassian-darkBorder bg-white dark:bg-atlassian-darkSurface shadow-atl-card flex flex-col md:flex-row items-center justify-between gap-4 mb-6"><div className="flex flex-wrap gap-1 bg-atlassian-bg dark:bg-atlassian-darkBg p-1 rounded-lg">{categories.map((cat) => (<button key={cat.id} onClick={() => setExpertFilter(cat.id)} className={`flex items-center gap-2 px-3 py-1.5 rounded-md text-[11px] font-bold uppercase tracking-wide transition-all ${expertFilter === cat.id ? 'bg-white text-atlassian-text shadow-sm dark:bg-atlassian-darkSurface dark:text-white' : 'text-atlassian-subtext dark:text-atlassian-darkSubtext hover:text-atlassian-text dark:hover:text-white'}`}><span className={`material-symbols-rounded text-[16px] ${expertFilter === cat.id ? 'text-atlassian-brand' : ''}`}>{cat.icon}</span><span className={expertFilter === cat.id ? 'text-atlassian-text dark:text-white' : ''}>{cat.label}</span></button>))}</div><div className="relative w-full md:w-80"><span className="material-symbols-rounded absolute left-3 top-1/2 -translate-y-1/2 text-atlassian-subtext text-[18px]">search</span><input type="text" placeholder="Search" value={expertSearchQuery} onChange={(e) => setExpertSearchQuery(e.target.value)} className="w-full h-9 pl-10 pr-4 bg-atlassian-bg dark:bg-atlassian-darkBg border-none rounded-lg text-xs font-medium text-atlassian-text dark:text-white placeholder:text-atlassian-subtext/60 focus:ring-1 focus:ring-atlassian-brand/30 outline-none transition-all" /></div></div>
+        <div className="atl-card p-4 flex flex-col md:flex-row items-center justify-between gap-4 mb-6">
+          <TabsList>
+            {categories.map((cat) => (
+              <TabsTrigger key={cat.id} active={expertFilter === cat.id} onClick={() => setExpertFilter(cat.id)}>
+                <span className={cn('material-symbols-rounded text-[16px]', expertFilter === cat.id && 'text-atlassian-brand')}>{cat.icon}</span>
+                <span>{cat.label}</span>
+              </TabsTrigger>
+            ))}
+          </TabsList>
+          <div className="relative w-full md:w-80">
+            <span className="material-symbols-rounded absolute left-3 top-1/2 -translate-y-1/2 text-atlassian-subtext text-[18px]">search</span>
+            <Input type="text" placeholder="Search" value={expertSearchQuery} onChange={(e) => setExpertSearchQuery(e.target.value)} className="h-9 pl-10 pr-4 text-xs font-medium" />
+          </div>
+        </div>
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">{filteredExperts.length > 0 ? (filteredExperts.map(expert => (<div key={expert.id} className="atl-card p-6 flex flex-col group hover:border-atlassian-brand transition-colors relative">{expert.isAcademyMember && (<div className="absolute top-4 right-4 bg-atlassian-success/10 text-atlassian-success px-2 py-0.5 rounded flex items-center gap-1.5 shadow-sm"><span className="material-symbols-rounded text-[14px]">school</span><span className="text-[9px] font-bold uppercase tracking-wide">SOKB Academy</span></div>)}<div className="flex items-center gap-4 mb-6 mt-1"><div className="relative">{expert.avatarUrl ? (<img src={expert.avatarUrl} alt={expert.name} className="w-16 h-16 rounded-full object-cover shadow-sm" />) : (<div className="w-16 h-16 rounded-full bg-atlassian-bg dark:bg-white/5 flex items-center justify-center text-xl font-bold text-atlassian-subtext">{expert.name.charAt(0)}</div>)}<div className={`absolute bottom-0 right-0 w-4 h-4 rounded-full border-2 border-white dark:border-atlassian-darkSurface ${expert.status === 'online' ? 'bg-atlassian-success' : 'bg-gray-400'}`}></div></div><div><h3 className="text-sm font-bold text-atlassian-text dark:text-white leading-tight">{expert.name}</h3><p className="text-xs text-atlassian-subtext mt-0.5">{expert.role}</p><div className="flex items-center gap-1 mt-1 text-atlassian-warning"><span className="material-symbols-rounded text-[14px]">star</span><span className="text-xs font-bold">{expert.rating}</span></div></div></div><div className="flex-1 mb-6"><div className="flex flex-wrap gap-2 mb-4">{expert.tags.map(tag => (<span key={tag} className="px-2 py-0.5 bg-atlassian-bg dark:bg-atlassian-darkBg text-atlassian-subtext text-[10px] font-bold uppercase rounded tracking-wide">{tag}</span>))}</div><div className="flex justify-between items-center text-xs text-atlassian-subtext"><span>Experience: <span className="font-bold text-atlassian-text dark:text-white">{expert.exp}</span></span><button onClick={() => openContactModal(expert)} className="text-[10px] font-bold text-atlassian-brand uppercase tracking-wide hover:underline transition-all">Contact</button></div></div><button onClick={() => openConnectModal(expert)} className="w-full h-9 bg-atlassian-brand/10 text-atlassian-brand dark:bg-atlassian-brand/20 dark:text-white text-xs font-bold rounded-lg uppercase tracking-wider hover:bg-atlassian-brand/20 dark:hover:bg-atlassian-brand/30 transition-all flex items-center justify-center gap-2"><span className="material-symbols-rounded text-[16px]">person_add</span>Connect</button></div>))) : (<div className="col-span-full py-20 flex flex-col items-center justify-center opacity-40"><span className="material-symbols-rounded text-6xl mb-4">search_off</span><p className="font-bold uppercase tracking-widest">Nothing found</p></div>)}</div>
       </div>
     );
@@ -1049,7 +1067,14 @@ const App: React.FC = () => {
                       <p className="text-xs text-atlassian-subtext dark:text-atlassian-darkSubtext mt-1">Strategic reporting and forecasting</p>
                    </div>
                 </div>
-                <div className="flex items-center gap-3"><button onClick={() => alert("PDF report generation started.")} className="h-10 px-4 bg-atlassian-bg dark:bg-atlassian-darkBg border border-atlassian-border dark:border-atlassian-darkBorder text-atlassian-text dark:text-white text-[10px] font-bold rounded-lg uppercase tracking-widest hover:bg-atlassian-border dark:hover:bg-white/10 transition-colors flex items-center gap-2"><span className="material-symbols-rounded text-[18px]">picture_as_pdf</span>Download PDF</button><button onClick={fetchInsights} disabled={isAnalyzing} className={`h-10 px-4 bg-atlassian-brand text-white text-[10px] font-bold rounded-lg uppercase tracking-widest transition-all flex items-center gap-2 ${isAnalyzing ? 'opacity-50' : 'hover:bg-atlassian-brandHover active:scale-95 shadow-md shadow-atlassian-brand/20'}`}><span className="material-symbols-rounded text-[18px]">{isAnalyzing ? 'sync' : 'bolt'}</span>{isAnalyzing ? 'Analyzing...' : 'Refresh'}</button></div>
+                <div className="flex items-center gap-3">
+                  <Button onClick={() => alert("PDF report generation started.")} variant="outline" className="text-[10px] tracking-widest">
+                    <span className="material-symbols-rounded text-[18px]">picture_as_pdf</span>Download PDF
+                  </Button>
+                  <Button onClick={fetchInsights} disabled={isAnalyzing} className="text-[10px] tracking-widest shadow-md shadow-atlassian-brand/20">
+                    <span className="material-symbols-rounded text-[18px]">{isAnalyzing ? 'sync' : 'bolt'}</span>{isAnalyzing ? 'Analyzing...' : 'Refresh'}
+                  </Button>
+                </div>
              </div>
              <div className="atl-card p-6"><div className="flex items-center justify-between mb-6"><h3 className="text-sm font-bold text-atlassian-text dark:text-atlassian-darkText uppercase tracking-wider">Sustainable development forecast 2025-2027</h3></div><div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">{forecastMetrics.map((metric, idx) => (<StatCard key={idx} title={metric.title} subtitle={metric.subtitle} value={metric.data[3].fact || 0} change={parseFloat(metric.cagr)} icon={metric.icon} color={metric.colorClass || 'text-atlassian-brand'} theme={theme} trendData={metric.data.map(d => ({ value: d.fact || d.forecast || 0 }))} subMetrics={metric.subMetrics} />))}</div></div>
              <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 items-start">
@@ -1101,31 +1126,34 @@ const App: React.FC = () => {
       <main className={`flex-1 ${isSidebarCollapsed ? 'ml-20' : 'ml-72'} p-8 transition-all duration-300`}>
         <header className="flex justify-between items-center mb-8">
           <div>
-            <div className="flex items-center gap-2 text-[10px] text-atlassian-subtext dark:text-atlassian-darkSubtext font-bold uppercase tracking-wider mb-2"><span>Home</span><span className="material-symbols-rounded text-[12px]">chevron_right</span><span>Reports</span><span className="material-symbols-rounded text-[12px]">chevron_right</span><span className="bg-atlassian-text text-white px-2 py-0.5 rounded shadow-sm flex items-center gap-1 dark:bg-atlassian-darkBorder"><span className="material-symbols-rounded text-[12px] text-white">check_circle</span>{breadcrumbLabel}</span></div>
+            <div className="flex items-center gap-2 text-[10px] text-atlassian-subtext dark:text-atlassian-darkSubtext font-bold uppercase tracking-wider mb-2"><span>Home</span><span className="material-symbols-rounded text-[12px]">chevron_right</span><span>Reports</span><span className="material-symbols-rounded text-[12px]">chevron_right</span><Badge className="bg-atlassian-text text-white shadow-sm dark:bg-atlassian-darkBorder"><span className="material-symbols-rounded text-[12px] text-white">check_circle</span>{breadcrumbLabel}</Badge></div>
             <h1 className="text-4xl font-medium text-atlassian-text dark:text-white tracking-tight leading-tight">{activeTitle}</h1>
           </div>
           <div className="flex items-center gap-3">
-            <button
+            <Button
               title="Settings"
-              className="w-10 h-10 rounded-lg flex items-center justify-center text-atlassian-subtext hover:bg-white dark:hover:bg-atlassian-darkBorder transition-colors bg-white/50 dark:bg-atlassian-darkSurface border border-atlassian-border dark:border-atlassian-darkBorder"
+              variant="outline"
+              size="icon"
             >
               <span className="material-symbols-rounded text-[20px]">settings</span>
-            </button>
-            <button
+            </Button>
+            <Button
               onClick={toggleLanguage}
               title={language === 'en' ? 'Switch to Russian' : 'Switch to English'}
-              className="h-10 px-3 rounded-lg flex items-center gap-1.5 text-atlassian-brand hover:bg-white dark:hover:bg-atlassian-darkBorder transition-colors bg-white/70 dark:bg-atlassian-darkSurface border border-atlassian-brand/30 dark:border-atlassian-darkBorder shadow-sm"
+              variant="outline"
+              className="border-atlassian-brand/30 text-atlassian-brand"
             >
               <span className="material-symbols-rounded text-[18px]">translate</span>
               <span className="text-[11px] font-black uppercase tracking-widest">{language.toUpperCase()}</span>
-            </button>
-            <button
+            </Button>
+            <Button
               onClick={toggleTheme}
               title={theme === 'light' ? 'Switch to dark theme' : 'Switch to light theme'}
-              className="w-10 h-10 rounded-lg flex items-center justify-center text-atlassian-subtext hover:bg-white dark:hover:bg-atlassian-darkBorder transition-colors bg-white/50 dark:bg-atlassian-darkSurface border border-atlassian-border dark:border-atlassian-darkBorder"
+              variant="outline"
+              size="icon"
             >
               <span className="material-symbols-rounded text-[20px]">{theme === 'light' ? 'dark_mode' : 'light_mode'}</span>
-            </button>
+            </Button>
           </div>
         </header>
         {renderSectionContent()}
